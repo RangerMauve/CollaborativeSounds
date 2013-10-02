@@ -1,0 +1,21 @@
+{
+  "name": "CollaborativeSounds",
+  "version": "0.0.0",
+  "description": "Collaborate To Make Sounds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RangerMauve/CollaborativeSounds.git"
+  },
+  "author": "RangerMauve",
+  "license": "BSD",
+  "gitHead": "f9d433d9bc377894562ace89a9f8aac9cceb5316",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "express": "~3.4.0",
+    "socket.io": "~0.9.16"
+  }
+}

@@ -1,0 +1,139 @@
+<style>
+	html {padding:100px;}
+	div, span, select, input {
+		margin:0;
+		padding:0;
+	}
+	.nodecontainer{
+		display:inline-block;
+	}
+	.node {
+		font-size:12px;
+		width:300px;
+		position:absolute;
+		box-shadow:3px 3px 10px rgba(50, 50, 50, 0.5);
+	}
+	.node .info, .node .controls{
+		border:1px solid #EEE;
+	}
+	.node .controls {
+		border-top:0;
+	}
+	.node .info {
+		text-transform:capitalize;
+		text-align:center;
+		padding:2px;
+	}
+	.node .controlcontainer {
+		padding:5px;
+	}
+	.node .controlcontainer .name{
+		display:inline-block;
+		text-transform:capitalize;
+		width:68px;
+		text-align:right;
+		padding-right:2px;
+	}
+	.node select.control {
+		width:190px;
+	}
+	.node .controlcontainer label {
+		display:inline-block;
+		width:190px;
+		text-align:center;
+	}
+	.node input[type=range].control {
+		width:190px;
+		margin-left:86px;
+	}
+	.node .input, .node .output{
+		display:inline-block;
+		width:10px;
+		height:10px;
+		border:1px dashed #DDD;
+		background:#F4F4F4;
+	}
+	.node .putpad {
+		display:inline-block;
+		width:12px;
+		height:12px;
+	}
+	.node .input:hover, .node .output:hover{
+		background:#DFD;
+	}
+</style>
+<script src="../../public/Mustache.js"></script>
+<div id="template" style="display:none">
+
+<div class="nodecontainer">
+	<div id="{{id}}" class="node">
+		<div class="info">
+			{{#hasinput}}<div class="input"></div>{{/hasinput}}
+			<span class="id">{{type}}: {{id}}</span>
+			{{#hasoutput}}<div class="output"></div>{{/hasoutput}}
+		</div>
+		<div class="controls">
+			{{#controls}}
+				<div class="controlcontainer {{name}}-container">
+					{{#input}}<div class="input"></div>{{/input}}
+					{{^input}}<div class="putpad"></div>{{/input}}
+					<span class="name">{{name}} :</span>
+					{{#range}}
+					<label class="{{name}}-label">
+						{{default}}{{^default}}0{{/default}}
+					</label>
+					<input
+						class="control {{name}}-control"
+						type="range"
+						min="{{min}}"
+						max="{{max}}"
+						value="{{default}}"
+						step="{{step}}"
+					/>
+					{{/range}}
+					{{#checkbox}}
+						<input type="checkbox"/>
+					{{/checkbox}}
+					{{#select}}
+					<select class="control {{name}}-control">
+						{{#options}}
+							<option value="{{.}}">{{.}}</option>
+						{{/options}}
+					</select>
+					{{/select}}
+				</div>
+			{{/controls}}
+		</div>
+	</div>
+</div>
+
+</div>
+<script>
+	var data =
+	{
+		id:"BBQD",
+		type:"oscillator",
+		hasoutput:true,
+		hasinput:true,
+		controls:[
+			{name:"frequency",range:true,input:true,min:200,max:10000,default:500,step:10},
+			{name:"shape",select:true,options:["sin","triangle","square"]},
+			{name:"on",checkbox:true,default:true}
+		]
+	}
+	var template = document.getElementById("template").innerHTML;
+	
+	var e = document.createElement("div");
+	e.innerHTML = Mustache.render(template, data);
+	document.body.appendChild(e);
+	
+	data.controls.forEach(function(control){
+		var name = control.name;
+		var container = document.querySelector("."+name+"-container");
+		var control = container.querySelector("."+name+"-control");
+		var label = container.querySelector("."+name+"-label");
+		if(label)control.addEventListener("change",function(){
+			label.innerHTML=this.value;
+		});
+	});
+</script>
